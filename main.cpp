@@ -1,5 +1,4 @@
-#include<iostream>
-using namespace std;
+#include"hash.h"
 //order 1 is ascending
 //order 2 is descending
 unsigned long long int ArrangeInOrder(unsigned long long int nNumber, unsigned long long int* pAsceding, unsigned long long int* pDescending)
@@ -39,11 +38,20 @@ unsigned long long int ArrangeInOrder(unsigned long long int nNumber, unsigned l
 int main()
 {
 	unsigned long long int nNumber = 0, nAscending = 0, nDescedning = 0;
-	cout << "enter the number";
-	cin >> nNumber;
-	ArrangeInOrder(nNumber, &nAscending, &nDescedning);
 
-	cout << "\n ascending order" << nAscending;
-	cout << "\n Descedning order" << nDescedning;
+
+	for (int nNumber = 1000; nNumber < 10000; nNumber++)
+	{
+		hashMap hash;
+		int temp = nNumber;
+		while (hash.insert(temp))
+		{
+			ArrangeInOrder(temp, &nAscending, &nDescedning);
+			temp = nDescedning - nAscending;
+		}
+
+		cout << " \n the kaprekars constant for nNumber" << temp;
+	}
+
 	return 0;
 }

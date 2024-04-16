@@ -1,4 +1,3 @@
-#include"CList.h"
 #include"hash.h"
 
 #define CAPACITY 1000003
@@ -69,5 +68,7 @@ int hashMap::deleteHashMap()
          }
      }
      if (arr)
-         free(arr);
+         delete[] arr ;
+
+     return 0;
  }
