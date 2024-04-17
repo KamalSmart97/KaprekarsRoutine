@@ -42,8 +42,8 @@ int hashMap::insert(unsigned long long int number)
 
      // Bucket index is empty....no collision
      if (arr[bucketIndex] == NULL) {
-         CList list;
-         arr[bucketIndex] = &list;
+         CList* list = new CList;
+         arr[bucketIndex] = list;
          arr[bucketIndex]->insertNext(number);
      }
      // Collision
@@ -64,7 +64,7 @@ int hashMap::deleteHashMap()
          if (arr[i])
          {
              arr[i]->removeAll();
-             free(arr[i]);
+             delete[] arr[i];
          }
      }
      if (arr)

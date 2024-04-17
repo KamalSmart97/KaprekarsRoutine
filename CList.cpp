@@ -3,8 +3,7 @@
 void CList::insertNext(unsigned long long int data)
 {
     m_count++;
-    newNode = (node*)malloc(sizeof(struct node));
-    newNode->link = NULL;
+    newNode = new node;
     if (!lastCreatedNode)
         head->link = newNode;
     else
@@ -29,7 +28,8 @@ void CList::removeAll()
     while ((tempNode = next()) != NULL)
     {
         head->link = tempNode->link;
-        free(tempNode);
+        CurrenPos = head;
+        delete tempNode;
     }
 }
 

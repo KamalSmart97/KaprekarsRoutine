@@ -44,9 +44,9 @@ int main()
 	{
 		hashMap hash;
 		int temp = nNumber;
-		while (hash.insert(temp))
+		while (hash.insert((unsigned long long int)temp))
 		{
-			ArrangeInOrder(temp, &nAscending, &nDescedning);
+			ArrangeInOrder((unsigned long long int)temp, (unsigned long long int*) &nAscending, (unsigned long long int*) &nDescedning);
 			temp = nDescedning - nAscending;
 		}
 
