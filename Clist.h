@@ -35,10 +35,6 @@ public:
         CurrenPos = head;
     }
     void removeAll();
-    ~CList()
-    {
-
-    }
 
     void reverseList();
 

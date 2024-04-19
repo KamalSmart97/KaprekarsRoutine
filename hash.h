@@ -33,6 +33,6 @@ public:
         deleteHashMap();
     }
     int insert( unsigned long long int number);
-    unsigned long int hashFunction(unsigned long long int number);
+    unsigned long long int hashFunction(unsigned long long int number);
 };
 
