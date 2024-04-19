@@ -49,15 +49,15 @@ int main()
 	{
 		hashMap hash;
 		unsigned long long int temp = nNumber;
-		fprintf(fp, "\n Number: %llu \n", &nNumber);
+		fprintf(fp, "\n Number: %llu \n", nNumber);
 		while (hash.insert(temp))
 		{
 			ArrangeInOrder(temp, &nAscending, &nDescedning,4);
 			temp = nDescedning - nAscending;
-			fprintf(fp, "%llu ->", &temp);
+			fprintf(fp, "%llu ->", temp);
 		}
 		fprintf(fp,"\n", &temp);
-		//cout << " \n the kaprekars constant for nNumber" << temp;
+		cout << " \n the kaprekars constant for nNumber" << temp;
 	}
 	if (fp)
 		fclose(fp);
