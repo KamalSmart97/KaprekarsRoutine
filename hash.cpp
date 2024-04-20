@@ -24,11 +24,14 @@ int hashMap::search(unsigned long long int number)
      CList * bucketList = arr[bucketIndex];
      node* tempNode = NULL;
 
-     bucketList->reset();
-     while ((tempNode=bucketList->next()) != NULL) {
-         // Key is found in the hashMap
-         if (tempNode->value == number) 
-             return 1;   
+     if (bucketList)
+     {
+         bucketList->reset();
+         while ((tempNode = bucketList->next()) != NULL) {
+             // Key is found in the hashMap
+             if (tempNode->value == number)
+                 return 1;
+         }
      }
      return 0;
  }

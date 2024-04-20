@@ -1,5 +1,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include"hash.h"
+
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 //order 1 is ascending
 //order 2 is descending
 unsigned long long int ArrangeInOrder(unsigned long long int nNumber, unsigned long long int* pAsceding, unsigned long long int* pDescending, int nNoOfDigits)
@@ -39,28 +44,88 @@ unsigned long long int ArrangeInOrder(unsigned long long int nNumber, unsigned l
 	return 0;
 }
 
-int main()
+int kaprekarCycle(unsigned long long int nStartValue, unsigned long long int nEndValue, char * fileName)
 {
-	unsigned long long int nNumber = 0llu, nAscending = 0llu, nDescedning = 0llu;
+	unsigned long long int nNumber = 0llu, nAscending = 0llu, nDescedning = 0llu, ntemp = 0llu;
+	bool bNewCycle = false;
 	FILE* fp = NULL;
-	fp = fopen("D:/testSamples/instance1.txt", "w+");
+	fp = fopen(fileName, "w+");
+	hashMap actualCyclehash;
 
-	for (unsigned long long int nNumber = 1000llu; nNumber < 10000llu; nNumber++)
+	for (unsigned long long int nNumber = nStartValue; nNumber < nEndValue; nNumber++)
 	{
-		hashMap hash;
-		unsigned long long int temp = nNumber;
-		fprintf(fp, "\n Number: %llu \n", nNumber);
-		while (hash.insert(temp))
+3		hashMap temphash;
+		bNewCycle = true;
+		ntemp = nNumber;
+		while (temphash.insert(ntemp))
 		{
-			ArrangeInOrder(temp, &nAscending, &nDescedning,4);
-			temp = nDescedning - nAscending;
-			fprintf(fp, "%llu ->", temp);
+			if (actualCyclehash.search(ntemp))
+			{
+				bNewCycle = false;
+				break;
+			}
+			ArrangeInOrder(ntemp, &nAscending, &nDescedning,11);
+			ntemp = nDescedning - nAscending;
 		}
-		fprintf(fp,"\n", &temp);
-		cout << " \n the kaprekars constant for nNumber" << temp;
+		if ((ntemp > 0) && bNewCycle)
+		{
+			fprintf(fp, "\n Number: %llu \n", nNumber);
+			while (actualCyclehash.insert(ntemp))
+			{
+				ArrangeInOrder(ntemp, &nAscending, &nDescedning, 11);
+				ntemp = nDescedning - nAscending;
+				fprintf(fp, "%llu ->", ntemp);
+			}
+			fprintf(fp,"\n", &ntemp);
+		}
 	}
 	if (fp)
 		fclose(fp);
 
+	return 0;
+}
+
+// Define a structure to pass parameters to the threads
+typedef struct {
+	unsigned long long int start;
+	unsigned long long int end;
+	char* fileName;
+} ThreadParams;
+
+// The thread function that calls kaprekarCycle
+void* threadFunction(void* arg) {
+	ThreadParams* params = (ThreadParams*)arg;
+	kaprekarCycle(params->start, params->end, params->fileName);
+	return NULL;
+}
+
+int main() {
+	const int NUM_THREADS = 4; // Number of threads to create
+	pthread_t threads[NUM_THREADS];
+	ThreadParams threadParams[NUM_THREADS];
+	char* fileNames[NUM_THREADS] = { "output1.txt", "output2.txt", "output3.txt", "output4.txt" };
+
+	// Assuming you want to process numbers from 1 to 1000000
+	unsigned long long int range = 1000000 / NUM_THREADS;
+	for (int i = 0; i < NUM_THREADS; i++) {
+		threadParams[i].start = i * range + 1;
+		threadParams[i].end = (i + 1) * range;
+		threadParams[i].fileName = fileNames[i];
+
+		if (pthread_create(&threads[i], NULL, threadFunction, &threadParams[i])) {
+			fprintf(stderr, "Error creating thread\n");
+			return 1;
+		}
+	}
+
+	// Wait for all threads to finish
+	for (int i = 0; i < NUM_THREADS; i++) {
+		if (pthread_join(threads[i], NULL)) {
+			fprintf(stderr, "Error joining thread\n");
+			return 2;
+		}
+	}
+
+	printf("Kaprekar cycles computation completed.\n");
 	return 0;
 }
