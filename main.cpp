@@ -64,6 +64,7 @@ void kaprekarCycle(unsigned long long int nStartValue, unsigned long long int nE
 		hashMap temphash;
 		bNewCycle = true;
 		ntemp = nNumber;
+		//fprintf(fp, "\n Number: %llu \n", nNumber);
 		while (temphash.insert(ntemp))
 		{
 			if (actualCyclehash.search(ntemp))
@@ -73,17 +74,19 @@ void kaprekarCycle(unsigned long long int nStartValue, unsigned long long int nE
 			}
 			ArrangeInOrder(ntemp, &nAscending, &nDescedning, NO_OF_DIGITS);
 			ntemp = nDescedning - nAscending;
+			//fprintf(fp, "%llu ->", ntemp);
 		}
+		//fprintf(fp, "\n");
 		if ((ntemp > 0) && bNewCycle)
 		{
-			fprintf(fp, "\n Number: %llu \n", nNumber);
+			fprintf(fp, "\n new cycle Number: %llu \n", nNumber);
 			while (actualCyclehash.insert(ntemp))
 			{
 				ArrangeInOrder(ntemp, &nAscending, &nDescedning, NO_OF_DIGITS);
 				ntemp = nDescedning - nAscending;
 				fprintf(fp, "%llu ->", ntemp);
 			}
-			fprintf(fp, "\n", &ntemp);
+			fprintf(fp, "\n");
 		}
 	}
 	if (fp)
@@ -96,13 +99,14 @@ int main() {
 	const int NUM_THREADS = 20; // Number of threads to create
 	thread threads[NUM_THREADS];
 	string fileNames[NUM_THREADS] = { "D:/project/kaprekarsroutine/sampleFIle/output1.txt", "D:/project/kaprekarsroutine/sampleFIle/output2.txt", "D:/project/kaprekarsroutine/sampleFIle/output3.txt", "D:/project/kaprekarsroutine/sampleFIle/output4.txt","D:/project/kaprekarsroutine/sampleFIle/output5.txt","D:/project/kaprekarsroutine/sampleFIle/output6.txt","D:/project/kaprekarsroutine/sampleFIle/output7.txt","D:/project/kaprekarsroutine/sampleFIle/output8.txt","D:/project/kaprekarsroutine/sampleFIle/output9.txt","D:/project/kaprekarsroutine/sampleFIle/output10.txt","D:/project/kaprekarsroutine/sampleFIle/output11.txt","D:/project/kaprekarsroutine/sampleFIle/output12.txt", "D:/project/kaprekarsroutine/sampleFIle/output13.txt", "D:/project/kaprekarsroutine/sampleFIle/output14.txt", "D:/project/kaprekarsroutine/sampleFIle/output15.txt", "D:/project/kaprekarsroutine/sampleFIle/output16.txt", "D:/project/kaprekarsroutine/sampleFIle/output17.txt", "D:/project/kaprekarsroutine/sampleFIle/output18.txt", "D:/project/kaprekarsroutine/sampleFIle/output19.txt","D:/project/kaprekarsroutine/sampleFIle/output20.txt" };
-	unsigned long long int nStart = 0, nEnd = 0;
+
 	// Assuming you want to process numbers from 1 to 1000000
 	unsigned long long int range = 1000000 / NUM_THREADS;
 	for (int i = 0; i < NUM_THREADS; i++) {
+		unsigned long long int nStart = 0, nEnd = 0;
 		nStart = i * range + 1;
 		nEnd = (i + 1) * range;
-		threads[i] = thread(kaprekarCycle, ref(nStart), ref(nEnd), ref(fileNames[i]));
+		threads[i] = thread(kaprekarCycle, nStart, nEnd, ref(fileNames[i]));
 	}
 
 	// Wait for all threads to finish
